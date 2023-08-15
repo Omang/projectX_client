@@ -6,9 +6,9 @@
   "scripts": {
     "start": "node index.js"
   },
- "engines": {
-      "node": ">=14.20.1"
-    },
+  "engines": {
+    "node": ">=14.20.1"
+  },
   "keywords": [
     "projectX",
     "AI",
@@ -28,6 +28,7 @@
     "express-async-handler": "^1.2.0",
     "image-downloader": "^4.3.0",
     "jsonwebtoken": "^9.0.1",
+    "langchain": "^0.0.128",
     "mammoth": "^1.6.0",
     "mongoose": "^7.4.1",
     "morgan": "^1.10.0",
