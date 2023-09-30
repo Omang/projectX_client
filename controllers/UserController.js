@@ -1,7 +1,72 @@
-
+const dotenv = require('dotenv');
 const expressAsyncHandler = require('express-async-handler');
-
+dotenv.config();
 const User = require('../models/UserModel');
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = require('twilio')(accountSid, authToken);
+
+
+
+const sendcode = expressAsyncHandler(async(req, res)=>{
+    const {mobilenumber} = req.body;
+    try{
+
+        const service = await client.verify.v2.services.create({friendlyName: 'Open Help Code'});
+
+        if(service.sid){
+            const verification = await client.verify.v2.services(service.sid)
+            .verifications.create({to: mobilenumber, channel: 'sms'});
+
+            if(verification.status == 'pending'){
+                res.json({verify: verification, service_sid: service.sid});
+            }else{
+                res.json({numberWrong: 'You number is invalid'});
+            }
+
+        }else{
+            res.json({serviceError: 'service not create'});
+        }
+
+    }catch(e){
+        throw new Error(e);
+    }
+})
+
+const verifycode = expressAsyncHandler(async(req, res)=>{
+    const {sentcode, sid, mobilenumber, password} = req.body;
+    console.log(req.body);
+    try{
+
+        const verification_check = await client.verify.v2.services(sid).verificationChecks.create({to: mobilenumber, code: sentcode});
+        
+        if(verification_check.status == 'approved'){
+
+
+        const finduser = await User.findOne({mobilenumber: mobilenumber});
+
+        if(!finduser){
+
+         const datax = await User.create({
+            mobilenumber: mobilenumber,
+            password: password
+         });
+        res.json({message: 'Registered successful'});
+
+        }else{
+            res.json({userexist: 'User exists'})
+        }
+
+
+
+        }else{
+            res.json({wrongcode: 'pending'})
+        }
+
+    }catch(e){
+        throw new Error(e);
+    }
+})
 
 const register = expressAsyncHandler(async(req, res)=>{
 
@@ -153,5 +218,5 @@ const userhistory = expressAsyncHandler(async(req, res)=>{
     }
 })
 
-module.exports ={register, login, verifyuser, forgotpassword, paymodule, 
+module.exports ={register, login, verifyuser, forgotpassword, paymodule, sendcode, verifycode, 
     updateprofile, paymentcheck, userhistory, addhistory};

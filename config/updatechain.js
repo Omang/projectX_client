@@ -72,7 +72,7 @@ const queryPinecone = expressAsyncHandler(async(client, indexName, question)=>{
     //query Pinecone index and return top best 10 matches
     let queryResponse = await index.query({
         queryRequest:{
-            topK: 10,
+            topK: 1,
             vector: queryEmbedding,
             includeMetadata:true,
             includeValues: true

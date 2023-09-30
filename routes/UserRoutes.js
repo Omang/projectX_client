@@ -1,6 +1,6 @@
 const express =require('express');
 const router = express.Router();
-const {register, login, verifyuser, paymentcheck, forgotpassword, paymodule, updateprofile} = require('../controllers/UserController');
+const {sendcode, verifycode, register, login, verifyuser, paymentcheck, forgotpassword, paymodule, updateprofile} = require('../controllers/UserController');
 
 
 
@@ -11,6 +11,8 @@ router.put('/pay',paymodule);
 router.put('/verifyuser/:id', verifyuser);
 router.get('/passwordreset', forgotpassword);
 router.get('/paymentcheck', paymentcheck);
+router.post('/sendcode', sendcode);
+router.post('/verifycode', verifycode);
 
 module.exports = router;
 
