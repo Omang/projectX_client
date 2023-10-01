@@ -107,9 +107,13 @@ const queryPinecone = expressAsyncHandler(async(client, indexName, question)=>{
       const chainA = new LLMChain({ llm: llm, prompt });
 
 // The result is an object with a `text` property.
-const resA = await chainA.call({ product: `${result.text}` });
+               if (result.text !== '') {
+                const resA = await chainA.call({ product: `${result.text}` });
 console.log({ resA });
       return {message: resA.text};
+  } else{
+      return {message: 'No answer provided. Please ask Contacts related queries only'};
+  }
     }else{
         console.log("No Answer");
         return {nothing: 'No answer'};
