@@ -4,7 +4,7 @@ const expressAsyncHandler = require('express-async-handler');
 const {OpenAI} = require('langchain/llms/openai');
 const {loadQAStuffChain, RetrievalQAChain, SimpleSequentialChain, LLMChain} = require('langchain/chains');
 const {Document} = require('langchain/document');
-import { PromptTemplate } from "langchain/prompts";
+const { PromptTemplate } = require('langchain/prompts');
 
 const dotenv = require('dotenv');
 dotenv.config();
