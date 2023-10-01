@@ -70,7 +70,7 @@ const updatePinecone = expressAsyncHandler(async(client, indexName, docs)=>{
 const queryPinecone = expressAsyncHandler(async(client, indexName, question)=>{
     //start query process
     console.log('Querying Pinecone vector store...');
-    const template = "You are a chatbot. having a conversation with a human. You have to be friendly. You are talking to a human. Your purpose is take input statement and present it to a user in a more friendly manner. here is the input statement, {product}. if {product} has no numbers included, just say: Sorry i'm limited to answer only contacts related queries.";
+    const template = "You are a chatbot. having a conversation with a human. You have to be friendly. You are talking to a human. Your purpose is take input statement and present it to a user in a more friendly manner. here is the input statement, {product}. if {product} has no numbers included, just say: I'm limited to answer only contacts related queries.";
   const prompt = new PromptTemplate({
         template,
         inputVariables: ["product"]}
