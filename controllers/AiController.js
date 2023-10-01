@@ -10,6 +10,8 @@ const { ChatOpenAI } = require("langchain/chat_models/openai");
 const { initializeAgentExecutorWithOptions } = require("langchain/agents");
 const { SerpAPI } = require("langchain/tools");
 const { Calculator } = require("langchain/tools/calculator");
+const dotenv = require('dotenv');
+dotenv.config();
 
 
 

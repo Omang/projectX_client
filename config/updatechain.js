@@ -2,8 +2,12 @@ const {OpenAIEmbeddings} = require('langchain/embeddings/openai');
 const {RecursiveCharacterTextSplitter} = require('langchain/text_splitter');
 const expressAsyncHandler = require('express-async-handler');
 const {OpenAI} = require('langchain/llms/openai');
-const {loadQAStuffChain} = require('langchain/chains');
+const {loadQAStuffChain, RetrievalQAChain, SimpleSequentialChain, LLMChain} = require('langchain/chains');
 const {Document} = require('langchain/document');
+import { PromptTemplate } from "langchain/prompts";
+
+const dotenv = require('dotenv');
+dotenv.config();
 
 
 const updatePinecone = expressAsyncHandler(async(client, indexName, docs)=>{
@@ -66,6 +70,11 @@ const updatePinecone = expressAsyncHandler(async(client, indexName, docs)=>{
 const queryPinecone = expressAsyncHandler(async(client, indexName, question)=>{
     //start query process
     console.log('Querying Pinecone vector store...');
+    const template = "You are a chatbot. having a conversation with a human. You have to be friendly. You are talking to a human. Your purpose is take input statement and present it to a user in a more friendly manner. here is the input statement, {product}. if {product} has no numbers included, just say: Sorry i'm limited to answer only contacts related queries.";
+  const prompt = new PromptTemplate({
+        template,
+        inputVariables: ["product"]}
+  );
     const index = client.Index(indexName);
     //create the query embedding
     const queryEmbedding = await new OpenAIEmbeddings({openAIApiKey:process.env.OPENAI_KEY}).embedQuery(question);
@@ -95,7 +104,12 @@ const queryPinecone = expressAsyncHandler(async(client, indexName, question)=>{
         question: question
       })
       console.log(`Answer: ${result.text}`)
-      return {message: result.text};
+      const chainA = new LLMChain({ llm: llm, prompt });
+
+// The result is an object with a `text` property.
+const resA = await chainA.call({ product: `${result.text}` });
+console.log({ resA });
+      return {message: resA.text};
     }else{
         console.log("No Answer");
         return {nothing: 'No answer'};

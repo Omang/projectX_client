@@ -1,5 +1,7 @@
 const {default: mongoose} = require('mongoose');
 const asyncHandler = require('express-async-handler');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const dbConnect = asyncHandler(async()=>{
     try {
