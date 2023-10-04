@@ -14,7 +14,7 @@ app.use(Body_parser.urlencoded({extended: false}));
 app.use(cors({
  
  credentials: true,
- origin: "https://openhelpportal.onrender.com"
+ origin: "https://www.ohp.co.bw"
 
 }));
 
