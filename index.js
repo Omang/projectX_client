@@ -14,7 +14,7 @@ app.use(Body_parser.urlencoded({extended: false}));
 app.use(cors({
  
  credentials: true,
- origin: "https://www.ohp.co.bw"
+ origin: "https://ohp.co.bw"
 
 }));
 
