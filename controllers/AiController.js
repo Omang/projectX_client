@@ -10,11 +10,23 @@ const { ChatOpenAI } = require("langchain/chat_models/openai");
 const { initializeAgentExecutorWithOptions } = require("langchain/agents");
 const { SerpAPI } = require("langchain/tools");
 const { Calculator } = require("langchain/tools/calculator");
+const {querydata} = require('../config/contractchain');
 const dotenv = require('dotenv');
 dotenv.config();
 
 
+const askcontract = async(req, res)=>{
+  const {question} = req.body;
 
+  try{
+
+    const datay = await querydata(question);
+    res.json(datay);
+
+  }catch(e){
+    throw new Error(e);
+  }
+}
 
 const runtest = async (req, res) => {
   const {xman} = req.body;
@@ -163,4 +175,4 @@ const gptcontacts = expressAsyncHandler(async(req, res)=>{
   }
 });
 
-module.exports = {runtest, AiCall, gptschool, gptpublic, gptarticle, gptdaller, gptcontacts};
+module.exports = {runtest, AiCall, gptschool, gptpublic, gptarticle, gptdaller, gptcontacts, askcontract};
